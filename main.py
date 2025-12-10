@@ -23,7 +23,7 @@ class Dashboard:
         self.selection_label.pack(pady=10)
 
         self.ticker_frame = TickerFrame(self.root)
-        self.ticker_frame.pack(pady=10, fill="none", padx=20)
+        self.ticker_frame.pack(pady=10, padx=30, anchor="nw", side="left")
 
         self._on_crypto_selected(None, self.dropdown.current_symbol, self.dropdown.crypto)
 

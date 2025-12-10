@@ -3,23 +3,23 @@ import json
 from datetime import datetime
 from tkinter.ttk import Frame, Label
 
-from pygments.styles.dracula import foreground
-
-
 class TickerFrame(Frame):
     def __init__(self, master, **kwargs):
         super().__init__(master, padding=12, **kwargs)
         self.configure(borderwidth=1, relief="solid")
         self.columnconfigure(0, weight=1)
 
-        self.price_var = Label(self, text="Price: --", font=("Arial", 16), anchor="center", justify="center")
-        self.price_var.grid(row=0, columnspan=2, sticky="ew", pady=(0, 4))
+        self.price_var = Label(self, text="Price: --", font="Arial 18 bold", anchor="center", justify="center")
+        self.price_var.grid(row=0, columnspan=3, sticky="ew", pady=(0, 4))
 
         self.change_var = Label(self, text="Change: --", font=("Arial", 10), anchor="center", justify="center")
         self.change_var.grid(row=1, column=0, sticky="w")
 
+        self.split = Label(self, text="|", font=("Arial", 13), anchor="center", justify="center")
+        self.split.grid(row=1, column=1)
+
         self.percent_var = Label(self, text="Percent: --%", font=("Arial", 10), anchor="center", justify="center")
-        self.percent_var.grid(row=1, column=1, sticky="e")
+        self.percent_var.grid(row=1, column=2, sticky="e")
 
         self.current_event_handler = None
 
