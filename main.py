@@ -1,9 +1,8 @@
-# python
-# `main.py`
 from tkinter import Tk
 from tkinter.ttk import Label, Button
 from components.dropdown import CryptoDropdown
 from components.ticker import TickerFrame
+from components.order_book import OrderBook
 from config import Config
 
 
@@ -14,6 +13,7 @@ class Dashboard:
         self.root.geometry("1200x800")
         self.crypto = None
         self.ticker_frame = None
+        self.order_book = None
         self.create_widgets()
 
     def create_widgets(self):
@@ -25,6 +25,9 @@ class Dashboard:
         self.ticker_frame = TickerFrame(self.root)
         self.ticker_frame.pack(pady=10, padx=30, anchor="nw", side="left")
 
+        self.order_book = OrderBook(self.root)
+        self.order_book.pack(pady=10, padx=30, anchor="nw", side="left")
+
         self._on_crypto_selected(None, self.dropdown.current_symbol, self.dropdown.crypto)
 
     def _on_crypto_selected(self, old_symbol, new_symbol, crypto):
@@ -33,6 +36,7 @@ class Dashboard:
         self.crypto = crypto
         self.crypto.connect_all()
         self.ticker_frame.bind_crypto(self.crypto)
+        self.order_book.bind_crypto(self.crypto)
         self.selection_label.config(text=f"Active symbol: {new_symbol}")
 
     def on_closing(self):
