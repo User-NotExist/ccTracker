@@ -3,14 +3,6 @@ from unittest.mock import MagicMock, patch
 from utils.binance_websocket import BinanceWebSocket
 
 class TestBinanceWebSocket(unittest.TestCase):
-
-    """def test_websocket_connection_opens_correctly(self):
-        ws = BinanceWebSocket("btcusdt", "ticker")
-        ws.connected = MagicMock()
-        with patch("websocket.WebSocketApp.run_forever", return_value=None):
-            ws.connect()
-        ws.connected.assert_called_once()"""
-
     def test_websocket_receives_message(self):
         ws = BinanceWebSocket("btcusdt", "ticker")
         ws.message_received = MagicMock()
