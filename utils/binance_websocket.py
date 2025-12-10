@@ -3,8 +3,6 @@ import websocket
 import threading
 import logging
 
-logger = logging.getLogger(__name__)
-
 class BinanceWebSocket:
     BASE_URL = 'wss://stream.binance.com:9443/ws/'
 
@@ -58,7 +56,7 @@ class BinanceWebSocket:
             self.ws.close()
 
     def _on_open(self, ws):
-        logger.info(f"WebSocket connection {self.symbol}@{self.stream_type} opened.")
+        print(f"WebSocket connection {self.symbol}@{self.stream_type} opened.")
         self.active = True
         self.connected()
 
@@ -66,11 +64,11 @@ class BinanceWebSocket:
         self.message_received(message)
 
     def _on_error(self, ws, error):
-        logger.error(f"WebSocket error: {error}")
+        print(f"WebSocket error: {error}")
         self.error_received(error)
 
     def _on_close(self, ws, status, msg):
-        logger.info(f"WebSocket connection {self.symbol}@{self.stream_type} closed.")
+        print(f"WebSocket connection {self.symbol}@{self.stream_type} closed.")
         self.active = False
         self.ws = None
         self.disconnected()
