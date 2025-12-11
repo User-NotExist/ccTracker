@@ -18,7 +18,11 @@ class Dashboard:
         self.ticker_labeled = {}
         self.ticker_container = None
         self.order_book = None
+
         self.create_crypto_list()
+
+        self.frame = Frame(self.root)
+
         self.create_widgets()
 
     def create_crypto_list(self):
@@ -28,8 +32,10 @@ class Dashboard:
 
             self.crypto_dic[i] = Crypto(i)
 
-
     def create_widgets(self):
+        self.frame.columnconfigure(0, weight=1)
+        self.frame.pack(pady=1)
+
         self.selection_label = Label(self.root, text="Active symbol: --")
         self.selection_label.pack(pady=10)
 

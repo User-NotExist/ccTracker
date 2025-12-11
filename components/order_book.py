@@ -4,7 +4,7 @@ from tkinter.ttk import Frame, Label, Treeview
 
 class OrderBook(Frame):
     def __init__(self, master, **kwargs):
-        super().__init__(master, padding=12, **kwargs)
+        super().__init__(master, padding=8, **kwargs)
         self.configure(borderwidth=1, relief="solid")
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
@@ -16,11 +16,13 @@ class OrderBook(Frame):
         self.bids_tree.heading("price", text="Price")
         self.bids_tree.heading("qty", text="Qty")
         self.bids_tree.grid(row=1, column=0, sticky="nsew", padx=(0, 8))
+        self.bids_tree.tag_configure(tagname="bids" ,foreground="green")
 
         self.asks_tree = Treeview(self, columns=("price", "qty"), show="headings", height=10)
         self.asks_tree.heading("price", text="Price")
         self.asks_tree.heading("qty", text="Qty")
         self.asks_tree.grid(row=1, column=1, sticky="nsew", padx=(8, 0))
+        self.asks_tree.tag_configure(tagname="asks" ,foreground="red")
 
         self._depth_event = None
 
@@ -43,11 +45,11 @@ class OrderBook(Frame):
         self.after(0, lambda: self._update_views(bids[:10], asks[:10]))
 
     def _update_views(self, bids, asks):
-        self._populate_tree(self.bids_tree, bids)
-        self._populate_tree(self.asks_tree, asks)
+        self._populate_tree(self.bids_tree, bids, "bids")
+        self._populate_tree(self.asks_tree, asks, "asks")
 
     @staticmethod
-    def _populate_tree(tree, rows):
+    def _populate_tree(tree, rows, tag):
         tree.delete(*tree.get_children())
         for price, qty in rows:
-            tree.insert("", "end", values=(price, qty))
+            tree.insert("", "end", values=(price, qty), tag=(tag,))

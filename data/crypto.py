@@ -1,5 +1,6 @@
 from utils.event import Event
 from utils.binance_websocket import BinanceWebSocket
+from utils.binance_rest import BinanceRest
 
 class Crypto:
     def __init__(self, symbol: str):
@@ -11,6 +12,8 @@ class Crypto:
         self.ws_kline_1m = BinanceWebSocket(symbol, 'kline_1m')
         self.ws_depth = BinanceWebSocket(symbol, 'depth')
         self.ws_aggregate_trade = BinanceWebSocket(symbol, 'aggTrade')
+
+        self.rest_helper = BinanceRest()
 
     def connect_all(self):
         """Establish WebSocket connections for all data streams."""
