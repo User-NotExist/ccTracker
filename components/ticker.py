@@ -25,10 +25,13 @@ class TickerFrame(Frame):
 
     def bind_crypto(self, crypto):
         ticker_event = crypto.ws_ticker.message_received
+
         if self.current_event_handler is ticker_event:
             return
+
         if self.current_event_handler:
             self.current_event_handler -= self.__handle_message
+
         self.current_event_handler = ticker_event
         self.current_event_handler += self.__handle_message
 

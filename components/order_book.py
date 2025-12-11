@@ -26,10 +26,13 @@ class OrderBook(Frame):
 
     def bind_crypto(self, crypto):
         depth_event = crypto.ws_depth.message_received
+
         if self._depth_event is depth_event:
             return
+
         if self._depth_event:
             self._depth_event -= self._handle_depth
+
         self._depth_event = depth_event
         self._depth_event += self._handle_depth
 
@@ -43,7 +46,8 @@ class OrderBook(Frame):
         self._populate_tree(self.bids_tree, bids)
         self._populate_tree(self.asks_tree, asks)
 
-    def _populate_tree(self, tree, rows):
+    @staticmethod
+    def _populate_tree(tree, rows):
         tree.delete(*tree.get_children())
         for price, qty in rows:
             tree.insert("", "end", values=(price, qty))

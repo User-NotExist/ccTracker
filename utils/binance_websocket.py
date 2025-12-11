@@ -19,7 +19,7 @@ class BinanceWebSocket:
 
         self.connected = Event()
         self.message_received = Event()
-        self.error_received = Event()
+        self.error_occurred = Event()
         self.disconnected = Event()
 
         self.ws = None
@@ -65,7 +65,7 @@ class BinanceWebSocket:
 
     def _on_error(self, ws, error):
         print(f"WebSocket error: {error}")
-        self.error_received(error)
+        self.error_occurred(error)
 
     def _on_close(self, ws, status, msg):
         print(f"WebSocket connection {self.symbol}@{self.stream_type} closed.")

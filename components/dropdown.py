@@ -3,13 +3,14 @@ from tkinter import StringVar
 from tkinter.ttk import Frame, Label, Combobox
 
 from data.crypto import Crypto
+from utils.event import Event
 
 
 class CryptoDropdown(Frame):
-    def __init__(self, master, crypto_list, on_selection=None, **kwargs):
+    def __init__(self, master, crypto_list, **kwargs):
         super().__init__(master, **kwargs)
 
-        self.on_selection = on_selection
+        self.on_selection = Event()
         self.selection = StringVar(value=crypto_list[0])
         self.current_symbol = self.selection.get()
         self.crypto = Crypto(self.current_symbol)
@@ -24,9 +25,9 @@ class CryptoDropdown(Frame):
             width=12,
         )
         self.dropdown.pack(side="left")
-        self.dropdown.bind("<<ComboboxSelected>>", self._handle_selection)
+        self.dropdown.bind("<<ComboboxSelected>>", self.__handle_selection)
 
-    def _handle_selection(self, _event=None):
+    def __handle_selection(self, _event=None):
         old_symbol = self.current_symbol
         new_symbol = self.selection.get()
 
@@ -36,5 +37,4 @@ class CryptoDropdown(Frame):
             self.crypto = Crypto(new_symbol)
             self.current_symbol = new_symbol
 
-        if callable(self.on_selection):
-            self.on_selection(old_symbol, new_symbol, self.crypto)
+        self.on_selection(old_symbol, new_symbol, self.crypto)
