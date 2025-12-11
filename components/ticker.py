@@ -1,6 +1,5 @@
 # components/ticker.py
 import json
-from datetime import datetime
 from tkinter.ttk import Frame, Label
 
 class TickerFrame(Frame):

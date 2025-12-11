@@ -1,4 +1,4 @@
-from tkinter import Tk, messagebox
+from tkinter import Tk
 from tkinter.ttk import Label, Button
 from components.dropdown import CryptoDropdown
 from components.ticker import TickerFrame
@@ -54,9 +54,7 @@ class Dashboard:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s -%(levelname)s -on line: %(lineno)d -%(message)s')
-    logger = logging.getLogger('name')
-    logger.debug('hello')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s -%(levelname)s - %(message)s')
     root = Tk()
     dashboard = Dashboard(root)
     root.protocol("WM_DELETE_WINDOW", dashboard.on_closing)

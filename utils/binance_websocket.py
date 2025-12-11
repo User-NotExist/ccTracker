@@ -89,7 +89,7 @@ class BinanceWebSocket:
         Args:
             ws (websocket.WebSocketApp): The WebSocket client instance.
         """
-        print(f"WebSocket connection {self.symbol}@{self.stream_type} opened.")
+        logging.info(f"WebSocket connection {self.symbol}@{self.stream_type} opened.")
         self.active = True
         self.connected()
 
@@ -111,7 +111,7 @@ class BinanceWebSocket:
             ws (websocket.WebSocketApp): The WebSocket client instance.
             error (Exception): The error that occurred.
         """
-        print(f"WebSocket error: {error}")
+        logging.error(f"WebSocket error: {error}")
         self.error_occurred(error)
 
     def _on_close(self, ws, status, msg):
@@ -123,7 +123,7 @@ class BinanceWebSocket:
             status (int): The status code of the closure.
             msg (str): The reason for the closure.
         """
-        print(f"WebSocket connection {self.symbol}@{self.stream_type} closed.")
+        logging.info(f"WebSocket connection {self.symbol}@{self.stream_type} closed.")
         self.active = False
         self.ws = None
         self.disconnected()
