@@ -14,7 +14,6 @@ class Crypto:
 
     def connect_all(self):
         """Establish WebSocket connections for all data streams."""
-        self.ws_ticker.connect()
         self.ws_trade.connect()
         self.ws_kline_1m.connect()
         self.ws_depth.connect()
@@ -22,7 +21,6 @@ class Crypto:
 
     def close_all(self):
         """Close all WebSocket connections."""
-        self.ws_ticker.close()
         self.ws_trade.close()
         self.ws_kline_1m.close()
         self.ws_depth.close()

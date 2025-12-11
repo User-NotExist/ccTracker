@@ -1,4 +1,5 @@
 # components/dropdown.py
+"""Deprecated: Use components/advanced_ticker.py instead."""
 from tkinter import StringVar
 from tkinter.ttk import Frame, Label, Combobox
 
