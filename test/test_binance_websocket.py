@@ -11,9 +11,9 @@ class TestBinanceWebSocket(unittest.TestCase):
 
     def test_websocket_handles_error(self):
         ws = BinanceWebSocket("btcusdt", "ticker")
-        ws.error_received = MagicMock()
+        ws.error_occurred = MagicMock()
         ws._on_error(None, "Test error")
-        ws.error_received.assert_called_once_with("Test error")
+        ws.error_occurred.assert_called_once_with("Test error")
 
     def test_websocket_closes_correctly(self):
         ws = BinanceWebSocket("btcusdt", "ticker")
