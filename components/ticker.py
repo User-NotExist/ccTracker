@@ -1,10 +1,13 @@
 # components/ticker.py
 import json
+import time
 from tkinter.ttk import Frame, Label
 
 class TickerFrame(Frame):
     def __init__(self, master, **kwargs):
         super().__init__(master, padding=12, **kwargs)
+        self.last_update = 0
+        self.update_interval = 0.2 # seconds
         self.configure(borderwidth=1, relief="solid")
         self.columnconfigure(0, weight=1)
 
@@ -35,6 +38,10 @@ class TickerFrame(Frame):
         self.current_event_handler += self.__handle_message
 
     def __handle_message(self, message):
+        if time.time() - self.last_update < self.update_interval:
+            return
+
+        self.last_update = time.time()
         data = json.loads(message)
         price = float(data.get("c"))
         change = float(data.get("p"))
