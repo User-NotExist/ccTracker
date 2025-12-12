@@ -1,8 +1,9 @@
 from tkinter import Tk
 from tkinter.ttk import Label, Button, Frame
-from components.dropdown import CryptoDropdown
+from components.graph import CandlestickChart
 from components.advanced_ticker import AdvancedTickerFrame
 from components.order_book import OrderBook
+from components.recent_trade import RecentTrade
 from data.crypto import Crypto
 from config import Config
 import logging
@@ -18,6 +19,10 @@ class Dashboard:
         self.ticker_labeled = {}
         self.ticker_container = None
         self.order_book = None
+        self.candlestick_chart = None
+        self.center_container = None
+        self.right_container = None
+        self.recent_trade = None
 
         self.create_crypto_list()
 
@@ -40,7 +45,7 @@ class Dashboard:
         self.selection_label.pack(pady=10)
 
         self.ticker_container = Frame(self.root)
-        self.ticker_container.configure(borderwidth=3, relief="solid")
+        self.ticker_container.configure(borderwidth=2, relief="solid")
 
         top_label = Label(self.ticker_container)
         top_label.config(text="Select a cryptocurrency:", font="Arial 14 bold")
@@ -56,8 +61,20 @@ class Dashboard:
 
         self.ticker_container.pack(pady=10, padx=30, anchor="nw", side="left")
 
-        self.order_book = OrderBook(self.root)
-        self.order_book.pack(pady=10, padx=30, anchor="nw", side="left")
+        self.center_container = Frame(self.root)
+        self.center_container.pack(pady=10, padx=30, anchor="nw", side="left", fill="both", expand=True)
+
+        self.order_book = OrderBook(self.center_container)
+        self.order_book.pack(pady=10, fill="x")
+
+        self.candlestick_chart = CandlestickChart(self.center_container)
+        self.candlestick_chart.pack(pady=10, fill="both", expand=True)
+
+        self.right_container = Frame(self.root)
+        self.right_container.pack(pady=10, padx=30, anchor="ne", side="right")
+
+        self.recent_trade = RecentTrade(self.right_container)
+        self.recent_trade.pack(pady=10)
 
         self._on_crypto_selected(list(self.crypto_dic.values())[0])
 
@@ -75,6 +92,8 @@ class Dashboard:
         self.active_crypto = crypto
         self.active_crypto.connect_all()
         self.order_book.bind_crypto(self.active_crypto)
+        self.candlestick_chart.bind_crypto(self.active_crypto)
+        self.recent_trade.bind_crypto(self.active_crypto)
         self.selection_label.config(text=f"Active symbol: {new_symbol}")
         self.ticker_labeled[new_symbol].configure(relief="sunken")
         self.ticker_labeled[new_symbol].disable_select_button()

@@ -66,7 +66,7 @@ class AdvancedTickerFrame(Frame):
         price = float(data.get("c"))
         change = float(data.get("p"))
         percent = float(data.get("P"))
-        self.after(0, lambda: self.__update_labels(price, change, percent))
+        self.master.after(0, lambda: self.__update_labels(price, change, percent))
 
     def __update_labels(self, price, change, percent):
         color = "green" if change >= 0 else "red"

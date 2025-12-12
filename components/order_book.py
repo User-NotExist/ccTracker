@@ -5,12 +5,12 @@ from tkinter.ttk import Frame, Label, Treeview
 class OrderBook(Frame):
     def __init__(self, master, **kwargs):
         super().__init__(master, padding=8, **kwargs)
-        self.configure(borderwidth=1, relief="solid")
+        self.configure(borderwidth=2, relief="solid")
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
-        Label(self, text="Bids", anchor="center").grid(row=0, column=0, sticky="ew")
-        Label(self, text="Asks", anchor="center").grid(row=0, column=1, sticky="ew")
+        Label(self, text="Bids", font="Arial 14 bold", anchor="center").grid(row=0, column=0, sticky="ew")
+        Label(self, text="Asks", font="Arial 14 bold", anchor="center").grid(row=0, column=1, sticky="ew")
 
         self.bids_tree = Treeview(self, columns=("price", "qty"), show="headings", height=10)
         self.bids_tree.heading("price", text="Price")
