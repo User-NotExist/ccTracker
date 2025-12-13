@@ -4,6 +4,7 @@ from components.graph import CandlestickChart
 from components.advanced_ticker import AdvancedTickerFrame
 from components.order_book import OrderBook
 from components.recent_trade import RecentTrade
+from components.best_trade import BestTrade
 from data.crypto import Crypto
 from config import Config
 import logging
@@ -16,13 +17,16 @@ class Dashboard:
         self.root.geometry("1600x900")
         self.crypto_dic = {}
         self.active_crypto = None
-        self.ticker_labeled = {}
+
         self.ticker_container = None
-        self.order_book = None
-        self.candlestick_chart = None
         self.center_container = None
         self.right_container = None
+
+        self.ticker_labeled = {}
+        self.order_book = None
+        self.candlestick_chart = None
         self.recent_trade = None
+        self.best_trade = None
 
         self.create_crypto_list()
 
@@ -75,6 +79,9 @@ class Dashboard:
         self.recent_trade = RecentTrade(self.right_container)
         self.recent_trade.pack(pady=10)
 
+        self.best_trade = BestTrade(self.right_container)
+        self.best_trade.pack(pady=10)
+
         self._on_crypto_selected(list(self.crypto_dic.values())[0])
 
     def _on_crypto_selected(self, crypto):
@@ -93,6 +100,7 @@ class Dashboard:
         self.order_book.bind_crypto(self.active_crypto)
         self.candlestick_chart.bind_crypto(self.active_crypto)
         self.recent_trade.bind_crypto(self.active_crypto)
+        self.best_trade.bind_crypto(self.active_crypto)
         self.selection_label.config(text=f"Active symbol: {new_symbol}")
         self.ticker_labeled[new_symbol].configure(relief="sunken")
         self.ticker_labeled[new_symbol].disable_select_button()
