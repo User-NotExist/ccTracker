@@ -1,10 +1,14 @@
 from tkinter import Tk, BooleanVar
 from tkinter.ttk import Label, Button, Frame, Checkbutton
+
 from components.graph import CandlestickChart
 from components.advanced_ticker import AdvancedTickerFrame
 from components.order_book import OrderBook
 from components.recent_trade import RecentTrade
 from components.best_trade import BestTrade
+
+from utils.network_connection_test import check_network
+
 from data.crypto import Crypto
 from config import Config
 import logging
@@ -192,6 +196,11 @@ class Dashboard:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s -%(levelname)s - %(message)s')
+
+    if not check_network():
+        logging.error("No network connection. Please check your internet connection and try again.")
+        exit(1)
+
     root = Tk()
     #root.config(bg="#0A122A")
     dashboard = Dashboard(root)
