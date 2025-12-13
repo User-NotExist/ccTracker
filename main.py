@@ -1,5 +1,5 @@
 from tkinter import Tk
-from tkinter.ttk import Label, Button, Frame
+from tkinter.ttk import Label, Button, Frame, Style
 from components.graph import CandlestickChart
 from components.advanced_ticker import AdvancedTickerFrame
 from components.order_book import OrderBook
@@ -42,7 +42,6 @@ class Dashboard:
         self.frame.pack(pady=1)
 
         self.selection_label = Label(self.root, text="Active symbol: --")
-        self.selection_label.pack(pady=10)
 
         self.ticker_container = Frame(self.root)
         self.ticker_container.configure(borderwidth=2, relief="solid")
@@ -53,13 +52,13 @@ class Dashboard:
 
         for value in self.crypto_dic.values():
             ticker = AdvancedTickerFrame(self.ticker_container)
-            ticker.pack(pady=5)
+            ticker.pack(pady=5, fill="x")
             ticker.bind_crypto(value)
             ticker.button_pressed += self._on_crypto_selected
 
             self.ticker_labeled[value.symbol] = ticker
 
-        self.ticker_container.pack(pady=10, padx=30, anchor="nw", side="left")
+        self.ticker_container.pack(pady=10, padx=30, anchor="nw", side="left", fill="x")
 
         self.center_container = Frame(self.root)
         self.center_container.pack(pady=10, padx=30, anchor="nw", side="left", fill="both", expand=True)
@@ -115,6 +114,7 @@ class Dashboard:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s -%(levelname)s - %(message)s')
     root = Tk()
+    root.config(bg="#0A122A")
     dashboard = Dashboard(root)
     root.protocol("WM_DELETE_WINDOW", dashboard.on_closing)
     root.mainloop()

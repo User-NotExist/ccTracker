@@ -6,7 +6,7 @@ from utils.event import Event
 
 class AdvancedTickerFrame(Frame):
     def __init__(self, master, **kwargs):
-        super().__init__(master, padding=12, **kwargs)
+        super().__init__(master, padding=12,**kwargs)
         self.last_update = 0
         self.update_interval = 0.2 # seconds
         self.configure(borderwidth=1, relief="groove")

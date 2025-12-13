@@ -1,17 +1,16 @@
+# components/graph.py
 import tkinter as tk
 from tkinter.ttk import Frame, Label
+#import mplfinance as mpf
 import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from matplotlib.ticker import FuncFormatter
 import json
 from datetime import datetime
 import logging
 
 
 class CandlestickChart(Frame):
-    """A candlestick chart widget for displaying crypto price data."""
-
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.crypto = None
@@ -34,7 +33,6 @@ class CandlestickChart(Frame):
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         self.current_event_handler = None
-        self.timestamps = []
 
         self._init_chart()
 
@@ -46,48 +44,28 @@ class CandlestickChart(Frame):
         self.ax_volume.set_xlabel("Time")
         self.canvas.draw()
 
-    def _format_price(self, value, pos):
-        """Format price values with comma separators and 2 decimal places."""
-        return f"{value:,.2f}"
-
-    def _format_volume(self, value, pos):
-        """Format volume values with K/M suffixes."""
-        if value >= 1_000_000:
-            return f"{value / 1_000_000:,.2f}M"
-        elif value >= 1_000:
-            return f"{value / 1_000:,.2f}K"
-        return f"{value:,.2f}"
-
-    def _format_time(self, value, pos):
-        """Format x-axis as HH:MM timestamp."""
-        idx = int(value)
-        if 0 <= idx < len(self.timestamps):
-            return self.timestamps[idx].strftime("%H:%M")
-        return ""
-
     def bind_crypto(self, crypto):
         """Bind to a crypto instance and subscribe to kline data."""
+        #logging.info("Binding messages to candlestick chart for %s", crypto.symbol)
         self.crypto = crypto
-        kline_event = self.crypto.ws_kline_1h.message_received
+        kline_event = self.crypto.ws_kline_1m.message_received
 
         if self.current_event_handler is kline_event:
             return
 
         if self.current_event_handler:
             self.current_event_handler -= self._on_kline_message
-            self.data = []
-            self.timestamps = []
+            self.data = []  # Clear previous data
             logging.info("Unbound previous kline event handler.")
 
-        self._retrieve_kline_history()
         self.current_event_handler = kline_event
         self.current_event_handler += self._on_kline_message
         logging.info("Subscribed to kline messages for %s", crypto.symbol)
 
-    def _retrieve_kline_history(self):
+    def _retrive_initial_data(self):
         """Retrieve initial historical kline data."""
         try:
-            klines = self.crypto.rest_helper.request("GET", "/api/v3/klines", params={"symbol": f"{self.crypto.symbol}", "limit": 50, "interval": "1h"})
+            klines = self.crypto.rest_helper.requests("GET", "/api/v3/klines")
             self.data = []
             for kline in klines:
                 candle = {
@@ -104,13 +82,15 @@ class CandlestickChart(Frame):
         except Exception as e:
             logging.error("Error retrieving historical kline data: %s", e)
 
-
     def _on_kline_message(self, message):
         """Handle incoming kline/candlestick data."""
+        # Schedule processing on the main thread
+        #logging.info("Received kline message: %s", message)
         self.after(0, self._process_kline_message, message)
 
     def _process_kline_message(self, message):
         """Process kline message on main thread."""
+        #logging.info("Processing kline/candlestick message: %s", message)
         try:
             data = json.loads(message)
             kline = data.get('k', {})
@@ -143,14 +123,14 @@ class CandlestickChart(Frame):
             return
 
         df = pd.DataFrame(self.data)
-        self.timestamps = df['time'].tolist()
+        df.set_index('time', inplace=True)
         df = df[['open', 'high', 'low', 'close', 'volume']]
         df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
 
         self.ax_price.clear()
         self.ax_volume.clear()
 
-        # Draw candlesticks and volume bars
+        # Draw candlesticks
         for i in range(len(df)):
             color = 'green' if df['Close'].iloc[i] >= df['Open'].iloc[i] else 'red'
             # Candle body
@@ -161,16 +141,10 @@ class CandlestickChart(Frame):
             # Volume bars
             self.ax_volume.bar(i, df['Volume'].iloc[i], color=color, width=0.8)
 
-        # Apply formatters
-        self.ax_price.yaxis.set_major_formatter(FuncFormatter(self._format_price))
-        self.ax_volume.yaxis.set_major_formatter(FuncFormatter(self._format_volume))
-        self.ax_price.xaxis.set_major_formatter(FuncFormatter(self._format_time))
-        self.ax_volume.xaxis.set_major_formatter(FuncFormatter(self._format_time))
-
         self.ax_price.set_ylabel("Price")
-        self.ax_price.set_title(f"{self.crypto.symbol.upper()} - 1H Candles")
+        self.ax_price.set_title(f"{self.crypto.symbol.upper()} - 1h Candles")
         self.ax_volume.set_ylabel("Volume")
-        self.ax_volume.set_xlabel("Time (HH:MM)")
+        self.ax_volume.set_xlabel("Time")
 
         self.fig.tight_layout()
         self.canvas.draw()
