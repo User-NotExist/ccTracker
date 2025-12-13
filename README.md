@@ -21,7 +21,7 @@ A cryptocurrency price tracker built with Python and Tkinter.
     ```bash
     cd ccTracker
     ```
-3. OPTIONAL: Use virtual environment to not brick your system packages (in case something goes wrong):
+3. **OPTIONAL:** Use virtual environment to not brick your system packages (in case something goes wrong):
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
@@ -35,7 +35,7 @@ A cryptocurrency price tracker built with Python and Tkinter.
 ## Usage
 Run the main script to start the application:
 ```bash
-  python3 cc_tracker.py
+python3 main.py
 ```
 
 When you run the application for the first time, a configuration file (`config.json`) will be created in the project folder.
