@@ -104,7 +104,6 @@ class CandlestickChart(Frame):
         except Exception as e:
             logging.error("Error retrieving historical kline data: %s", e)
 
-
     def _on_kline_message(self, message):
         """Handle incoming kline/candlestick data."""
         self.after(0, self._process_kline_message, message)
