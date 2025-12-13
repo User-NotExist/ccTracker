@@ -7,12 +7,15 @@ class RecentTrade(Frame):
         super().__init__(master, padding=8, **kwargs)
         self.configure(borderwidth=2, relief="solid")
         self.columnconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
 
         Label(self, text="Trades", font="Arial 16 bold", anchor="center").grid(row=0, column=0, sticky="ew")
 
         self.trade_tree = Treeview(self, columns=("price", "qty"), show="headings", height=10)
         self.trade_tree.heading("price", text="Price")
         self.trade_tree.heading("qty", text="Qty")
+        self.trade_tree.column("price", width=120, minwidth=80, anchor="e")
+        self.trade_tree.column("qty", width=100, minwidth=60, anchor="e")
         self.trade_tree.grid(row=1, column=0, sticky="nsew", padx=(0, 8))
         self.trade_tree.tag_configure(tagname="bids", foreground="green")
         self.trade_tree.tag_configure(tagname="asks", foreground="red")

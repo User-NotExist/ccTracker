@@ -22,7 +22,7 @@ class AdvancedTickerFrame(Frame):
         self.change_var.grid(row=2, column=0, sticky="w")
 
         self.split = Label(self, text="|", font=("Arial", 13), anchor="center", justify="center")
-        self.split.grid(row=2, column=1)
+        self.split.grid(row=2, column=1, sticky="ew")
 
         self.percent_var = Label(self, text="Percent: --%", font=("Arial", 10), anchor="center", justify="center")
         self.percent_var.grid(row=2, column=2, sticky="e")

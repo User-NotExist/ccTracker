@@ -44,7 +44,7 @@ class Dashboard:
         self.selection_label = Label(self.root, text="Active symbol: --")
 
         self.ticker_container = Frame(self.root)
-        self.ticker_container.configure(borderwidth=2, relief="solid")
+        self.ticker_container.configure(borderwidth=2, relief="flat")
 
         top_label = Label(self.ticker_container)
         top_label.config(text="Select a cryptocurrency:", font="Arial 14 bold")
