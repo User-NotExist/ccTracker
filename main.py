@@ -129,7 +129,7 @@ class Dashboard:
             'recent_trade': self._toggle_recent_trade,
             'best_trade': self._toggle_best_trade
         })
-        self.toggle_panel.pack(pady=5, anchor="nw", padx=10)
+        self.toggle_panel.pack(pady=10, anchor="s", fill="both")
 
         last_crypto = Config.LAST_SELECTED_CRYPTO
         if last_crypto in self.crypto_dic:
