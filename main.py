@@ -84,16 +84,6 @@ class Dashboard:
         self.frame.columnconfigure(0, weight=1)
         self.frame.pack(pady=1)
 
-        # Create toggle panel with callbacks
-        self.toggle_panel = TogglePanel(self.root, callbacks={
-            'ticker': self._toggle_ticker,
-            'order_book': self._toggle_order_book,
-            'candlestick': self._toggle_candlestick,
-            'recent_trade': self._toggle_recent_trade,
-            'best_trade': self._toggle_best_trade
-        })
-        self.toggle_panel.pack(pady=5, anchor="nw", padx=10)
-
         self.selection_label = Label(self.root, text="Active symbol: --")
 
         self.ticker_container = Frame(self.root)
@@ -130,6 +120,16 @@ class Dashboard:
 
         self.recent_trade = RecentTrade(self.right_container)
         self.recent_trade.pack(pady=10, fill="x")
+
+        # Create toggle panel with callbacks
+        self.toggle_panel = TogglePanel(self.right_container, callbacks={
+            'ticker': self._toggle_ticker,
+            'order_book': self._toggle_order_book,
+            'candlestick': self._toggle_candlestick,
+            'recent_trade': self._toggle_recent_trade,
+            'best_trade': self._toggle_best_trade
+        })
+        self.toggle_panel.pack(pady=5, anchor="nw", padx=10)
 
         last_crypto = Config.LAST_SELECTED_CRYPTO
         if last_crypto in self.crypto_dic:
