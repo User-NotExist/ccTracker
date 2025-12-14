@@ -1,6 +1,9 @@
 # CryptoCurrency Tracker (CC-Tracker)
 A cryptocurrency price tracker built with Python and Tkinter.
 
+[Youtube Link](https://youtu.be/q46alDK3QR0)
+[image](./picture/msrdc_o8iBZo5yqS.png)
+
 ## Features
 - Real-time price updates for various cryptocurrencies.
 - Detailed reports of price history (24h) in candlestick.
