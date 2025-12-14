@@ -3,7 +3,7 @@ A cryptocurrency price tracker built with Python and Tkinter.
 
 [Youtube Link](https://youtu.be/q46alDK3QR0)
 
-[Screenshot](https://github.com/User-NotExist/ccTracker/raw/main/picture/msrdc_o8iBZo5yqS.png "Picture")
+![Screenshot](https://github.com/User-NotExist/ccTracker/raw/main/picture/msrdc_o8iBZo5yqS.png "Picture")
 
 ## Features
 - Real-time price updates for various cryptocurrencies.
@@ -57,3 +57,4 @@ When you run the application for the first time, a configuration file (`config.j
 | `SHOW_RECENT_TRADE` | `boolean` | `true` | Show/hide the recent trades list. |
 | `SHOW_BEST_TRADE` | `boolean` | `true` | Show/hide the best bid/ask display. |
 | `LAST_SELECTED_CRYPTO` | `string` | `"BTCUSDT"` | Last selected cryptocurrency symbol. Automatically saved when switching. Must exist in `CRYPTO_LIST`. |
+
