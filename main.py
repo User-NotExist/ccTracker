@@ -131,6 +131,8 @@ class Dashboard:
         })
         self.toggle_panel.pack(pady=10, anchor="s", fill="both")
 
+        self._apply_saved_toggle_states()
+
         last_crypto = Config.LAST_SELECTED_CRYPTO
         if last_crypto in self.crypto_dic:
             self._on_crypto_selected(self.crypto_dic[last_crypto])
@@ -159,6 +161,14 @@ class Dashboard:
         self.ticker_labeled[new_symbol].disable_select_button()
 
         Config.update("LAST_SELECTED_CRYPTO", new_symbol)
+
+    def _apply_saved_toggle_states(self):
+        """Apply saved toggle states on startup."""
+        self._toggle_ticker()
+        self._toggle_order_book()
+        self._toggle_candlestick()
+        self._toggle_recent_trade()
+        self._toggle_best_trade()
 
     def on_closing(self):
         logging.info("Closing Dashboard")
