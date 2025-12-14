@@ -2,7 +2,8 @@
 A cryptocurrency price tracker built with Python and Tkinter.
 
 [Youtube Link](https://youtu.be/q46alDK3QR0)
-[image](./picture/msrdc_o8iBZo5yqS.png)
+
+[Screenshot](https://github.com/User-NotExist/ccTracker/raw/main/picture/msrdc_o8iBZo5yqS.png "Picture")
 
 ## Features
 - Real-time price updates for various cryptocurrencies.
