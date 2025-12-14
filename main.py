@@ -1,11 +1,12 @@
-from tkinter import Tk, BooleanVar
-from tkinter.ttk import Label, Button, Frame, Checkbutton
+from tkinter import Tk
+from tkinter.ttk import Label, Frame
 
 from components.graph import CandlestickChart
 from components.advanced_ticker import AdvancedTickerFrame
 from components.order_book import OrderBook
 from components.recent_trade import RecentTrade
 from components.best_trade import BestTrade
+from components.toggle_panel import TogglePanel
 
 from utils.network_connection_test import check_network
 
@@ -33,12 +34,7 @@ class Dashboard:
         self.recent_trade = None
         self.best_trade = None
 
-        # Toggle variables
-        self.show_ticker = BooleanVar(value=Config.SHOW_TICKER)
-        self.show_order_book = BooleanVar(value=Config.SHOW_ORDER_BOOK)
-        self.show_candlestick = BooleanVar(value=Config.SHOW_CANDLESTICK)
-        self.show_recent_trade = BooleanVar(value=Config.SHOW_RECENT_TRADE)
-        self.show_best_trade = BooleanVar(value=Config.SHOW_BEST_TRADE)
+        self.toggle_panel = None
 
         self.create_crypto_list()
 
@@ -46,57 +42,34 @@ class Dashboard:
 
         self.create_widgets()
 
-    def create_toggle_panel(self):
-        toggle_frame = Frame(self.root)
-        toggle_frame.pack(pady=5, anchor="nw", padx=10)
-
-        Label(toggle_frame, text="Toggle Components:", font="Arial 12 bold").pack(side="left", padx=(0, 10))
-
-        Checkbutton(toggle_frame, text="Tickers", variable=self.show_ticker,
-                    command=self._toggle_ticker).pack(side="left", padx=5)
-        Checkbutton(toggle_frame, text="Order Book", variable=self.show_order_book,
-                    command=self._toggle_order_book).pack(side="left", padx=5)
-        Checkbutton(toggle_frame, text="Candlestick", variable=self.show_candlestick,
-                    command=self._toggle_candlestick).pack(side="left", padx=5)
-        Checkbutton(toggle_frame, text="Recent Trade", variable=self.show_recent_trade,
-                    command=self._toggle_recent_trade).pack(side="left", padx=5)
-        Checkbutton(toggle_frame, text="Best Trade", variable=self.show_best_trade,
-                    command=self._toggle_best_trade).pack(side="left", padx=5)
-
-    # Update toggle methods to save preferences:
     def _toggle_ticker(self):
-        Config.update("SHOW_TICKER", self.show_ticker.get())
-        if self.show_ticker.get():
+        if self.toggle_panel.show_ticker.get():
             self.ticker_container.pack(pady=10, padx=30, anchor="nw", side="left", fill="x",
                                        before=self.center_container)
         else:
             self.ticker_container.pack_forget()
 
     def _toggle_order_book(self):
-        Config.update("SHOW_ORDER_BOOK", self.show_order_book.get())
-        if self.show_order_book.get():
+        if self.toggle_panel.show_order_book.get():
             self.order_book.pack(pady=10, fill="x")
         else:
             self.order_book.pack_forget()
 
     def _toggle_candlestick(self):
-        Config.update("SHOW_CANDLESTICK", self.show_candlestick.get())
-        if self.show_candlestick.get():
+        if self.toggle_panel.show_candlestick.get():
             self.candlestick_chart.pack(pady=10, fill="both", expand=True)
         else:
             self.candlestick_chart.pack_forget()
 
     def _toggle_recent_trade(self):
-        Config.update("SHOW_RECENT_TRADE", self.show_recent_trade.get())
-        if self.show_recent_trade.get():
-            self.recent_trade.pack(pady=10)
+        if self.toggle_panel.show_recent_trade.get():
+            self.recent_trade.pack(pady=10, fill="x")
         else:
             self.recent_trade.pack_forget()
 
     def _toggle_best_trade(self):
-        Config.update("SHOW_BEST_TRADE", self.show_best_trade.get())
-        if self.show_best_trade.get():
-            self.best_trade.pack(pady=10)
+        if self.toggle_panel.show_best_trade.get():
+            self.best_trade.pack(pady=10, fill="x")
         else:
             self.best_trade.pack_forget()
 
@@ -111,7 +84,15 @@ class Dashboard:
         self.frame.columnconfigure(0, weight=1)
         self.frame.pack(pady=1)
 
-        self.create_toggle_panel()
+        # Create toggle panel with callbacks
+        self.toggle_panel = TogglePanel(self.root, callbacks={
+            'ticker': self._toggle_ticker,
+            'order_book': self._toggle_order_book,
+            'candlestick': self._toggle_candlestick,
+            'recent_trade': self._toggle_recent_trade,
+            'best_trade': self._toggle_best_trade
+        })
+        self.toggle_panel.pack(pady=5, anchor="nw", padx=10)
 
         self.selection_label = Label(self.root, text="Active symbol: --")
 
@@ -148,7 +129,7 @@ class Dashboard:
         self.best_trade.pack(pady=10, fill="x")
 
         self.recent_trade = RecentTrade(self.right_container)
-        self.recent_trade.pack(pady=10)
+        self.recent_trade.pack(pady=10, fill="x")
 
         last_crypto = Config.LAST_SELECTED_CRYPTO
         if last_crypto in self.crypto_dic:
@@ -177,7 +158,6 @@ class Dashboard:
         self.ticker_labeled[new_symbol].configure(relief="sunken")
         self.ticker_labeled[new_symbol].disable_select_button()
 
-        # Save last selected crypto
         Config.update("LAST_SELECTED_CRYPTO", new_symbol)
 
     def on_closing(self):
@@ -202,7 +182,6 @@ if __name__ == "__main__":
         exit(1)
 
     root = Tk()
-    #root.config(bg="#0A122A")
     dashboard = Dashboard(root)
     root.protocol("WM_DELETE_WINDOW", dashboard.on_closing)
     root.mainloop()
